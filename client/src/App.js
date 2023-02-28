@@ -1,7 +1,17 @@
 import './App.css';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Login from './Components/Login/Login';
+import Calendar from './Components/Calendar/Calendar';
 
 function App() {
-	return <div className="App">Hello World</div>;
+	return (
+		<BrowserRouter>
+			<Routes>
+				<Route path="/calendar" element={<Login />} />
+				<Route path="/" element={<Calendar startingDate={new Date()} />} />
+			</Routes>
+		</BrowserRouter>
+	);
 }
 
 export default App;
