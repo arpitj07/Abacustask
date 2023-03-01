@@ -1,11 +1,11 @@
-from flask import Flask, request, jsonify
-from flask_cors import CORS
+from flask import Flask, request, jsonify, send_from_directory
+from flask_cors import CORS, cross_origin
 from flask_pymongo import PyMongo
 from bson import ObjectId
 from utils import encryptPass, decryptPass, genID
 import uuid
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='client/build', static_url_path='')
 
 app.config['MONGO_URI'] = 'mongodb+srv://aspjain07:password_12345@my-cluster-00.hsnz2cn.mongodb.net/UserDataBase?retryWrites=true&w=majority'
 
@@ -16,6 +16,7 @@ db = mongo.db.UserEventCollection
 
 # Route for sign up 
 @app.route("/register", methods=['POST'])
+@cross_origin()
 def register():
     if request.method=='POST':
         user = db.find_one({'userEmail': request.json['userEmail']})
@@ -29,6 +30,7 @@ def register():
 
 #Login Route
 @app.route("/login", methods=[ 'POST'])
+@cross_origin()
 def login():
     if request.method=='POST':
         user = db.find_one({'userEmail': request.json['email']})
@@ -41,6 +43,7 @@ def login():
 
 # Routes to add events to the event list
 @app.route("/addEvent", methods=['POST'])
+@cross_origin()
 def addEvent():
     if request.method=='POST':
         db.update_one({'userEmail': request.json['userEmail']}, {'$push': { 'Task': {'TId':str(uuid.uuid4()),'Date': request.json['date'],'StartTime': request.json['startTime'], 'EndTime': request.json['endTime'], 'Event': request.json['eventText'],'Status': 'Not Finished'}}})
@@ -50,6 +53,7 @@ def addEvent():
 
 # Routes for deleting the events
 @app.route("/deleteEvent", methods=['POST'])
+@cross_origin()
 def deleteEvent():
     print(request.json['id'])
     if request.method=='POST':
@@ -59,6 +63,7 @@ def deleteEvent():
 
 # Routes for marking events as complete
 @app.route("/completeEvent", methods=['POST'])
+@cross_origin()
 def complete():
     if request.method=='POST':
         db.find_one_and_update({'userEmail': request.json['userEmail']},{'$push' : { 'Task' : { 'Status': 'Complete'}} })
@@ -67,13 +72,16 @@ def complete():
 
 # Routes for getting user details 
 @app.route("/userDetails/<userEmail>", methods=['GET'])
+@cross_origin()
 def getUsers(userEmail):
     if request.method=='GET':
         user = db.find_one({'userEmail': userEmail})
         return user['Task']
 
-
-
+@app.route("/")
+@cross_origin()
+def serve():
+    return send_from_directory(app.static_folder, 'index.html')
 
 if __name__ == "__main__":
     app.run(debug=True)
