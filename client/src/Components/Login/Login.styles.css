@@ -1,0 +1,49 @@
+.LoginWrapper{
+    width: 100%;
+    height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.LoginContainer .userInput{
+    width: 400px;
+    height: 350px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.userInput h3{
+    color: #003566;
+    font-size: 18px;
+}
+
+.userInput input{
+    width: 300px;
+    height: 50px;
+    border-radius:5px;
+    margin: 12px 0px;
+    outline: none;
+    border: none;
+    padding-left: 10px;
+    font-size: 18px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+
+.userInput button{
+    background-color: #003566;
+    height: 40px;
+    width: 250px;
+    border: none;
+    color: white;
+    margin-top: 20px;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    cursor: pointer;
+    font-size: 18px;
+}

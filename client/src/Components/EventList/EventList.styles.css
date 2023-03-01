@@ -1,0 +1,23 @@
+.ListWrapper{
+    width: 100vw;
+    height: 100%;
+    /* background-color: rgba(0, 0, 0, 0.5); */
+    position: absolute;
+    top: 0px;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.ListContainer{
+    position: relative;
+    left: 50px;
+    width: 550px;
+    background-color: white;
+    height: auto;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
