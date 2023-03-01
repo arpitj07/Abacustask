@@ -19,14 +19,10 @@ db = mongo.db.UserEventCollection
 def register():
     if request.method=='POST':
         user = db.find_one({'userEmail': request.json['userEmail']})
-       
         if(not user):
             encrypted_password = encryptPass(request.json['userPassword'])
-            
             db.insert_one({'userName': request.json['userName'], 'userEmail': request.json['userEmail'],'password':encrypted_password , 'Task': []})
-            
             return jsonify({'status': 'ok', 'message': 'successfully registered'})
-        
         else:
             return jsonify({'status': 'error', 'message': 'Email already exist'})
 
@@ -36,26 +32,19 @@ def register():
 def login():
     if request.method=='POST':
         user = db.find_one({'userEmail': request.json['email']})
-       
         if(user):
             if(decryptPass(request.json['userPassword'], user['password'])):
                 return jsonify({'status': 'ok', 'message': 'login successfully'})
         else:
             return jsonify({'status': 'error', 'message': 'Wrong credentials'})
 
+
 # Routes to add events to the event list
 @app.route("/addEvent", methods=['POST'])
 def addEvent():
     if request.method=='POST':
-        db.update_one({'userEmail': request.json['userEmail']}, {'$push': { 'Task': 
-                                                                    {'TId': str(uuid.uuid4()),
-                                                                     'Date': request.json['date'], 
-                                                                     'StartTime': request.json['startTime'], 
-                                                                     'EndTime': request.json['endTime'], 
-                                                                     'Event': request.json['eventText'],
-                                                                       'Status': 'Not Finished'}
-                                                                                    }
-                                                                        })
+        db.update_one({'userEmail': request.json['userEmail']}, {'$push': { 'Task': {'TId':str(uuid.uuid4()),'Date': request.json['date'],'StartTime': request.json['startTime'], 'EndTime': request.json['endTime'], 'Event': request.json['eventText'],'Status': 'Not Finished'}}})
+                    
         return jsonify({'status': 'ok', 'message': 'Event added successfully'})
     
 
@@ -67,6 +56,8 @@ def deleteEvent():
         db.find_one_and_update({'userEmail': request.json['userEmail']},{'$pull' : { 'Task' : { 'TID': request.json['id']}} })
         return jsonify({'status': 'ok', 'message': 'Event deleted'})
 
+
+# Routes for marking events as complete
 @app.route("/completeEvent", methods=['POST'])
 def complete():
     if request.method=='POST':
@@ -82,5 +73,9 @@ def getUsers(userEmail):
         return user['Task']
 
 
+
+
 if __name__ == "__main__":
     app.run(debug=True)
+
+
