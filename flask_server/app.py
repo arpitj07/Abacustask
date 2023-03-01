@@ -3,7 +3,7 @@ from flask_cors import CORS
 from flask_pymongo import PyMongo
 from bson import ObjectId
 from utils import encryptPass, decryptPass, genID
-
+import uuid
 
 app = Flask(__name__)
 
@@ -43,16 +43,40 @@ def login():
         else:
             return jsonify({'status': 'error', 'message': 'Wrong credentials'})
 
+# Routes to add events to the event list
 @app.route("/addEvent", methods=['POST'])
 def addEvent():
     if request.method=='POST':
-        db.find_one_and_update({'userEmail': request.json['userEmail']}, {'$push': { 'Task': {'TId': 'NewId_','Date': request.json['date'], 'StartTime': request.json['startTime'], 'EndTime': request.json['endTime'], 'Event': request.json['eventText'], 'Status': 'Not Finished'}}})
+        db.update_one({'userEmail': request.json['userEmail']}, {'$push': { 'Task': 
+                                                                    {'TId': str(uuid.uuid4()),
+                                                                     'Date': request.json['date'], 
+                                                                     'StartTime': request.json['startTime'], 
+                                                                     'EndTime': request.json['endTime'], 
+                                                                     'Event': request.json['eventText'],
+                                                                       'Status': 'Not Finished'}
+                                                                                    }
+                                                                        })
         return jsonify({'status': 'ok', 'message': 'Event added successfully'})
     
 
+# Routes for deleting the events
+@app.route("/deleteEvent", methods=['POST'])
+def deleteEvent():
+    print(request.json['id'])
+    if request.method=='POST':
+        db.find_one_and_update({'userEmail': request.json['userEmail']},{'$pull' : { 'Task' : { 'TID': request.json['id']}} })
+        return jsonify({'status': 'ok', 'message': 'Event deleted'})
+
+@app.route("/completeEvent", methods=['POST'])
+def complete():
+    if request.method=='POST':
+        db.find_one_and_update({'userEmail': request.json['userEmail']},{'$push' : { 'Task' : { 'Status': 'Complete'}} })
+        return jsonify({'status': 'ok', 'message': 'Event deleted'})
+
+
+# Routes for getting user details 
 @app.route("/userDetails/<userEmail>", methods=['GET'])
 def getUsers(userEmail):
-    
     if request.method=='GET':
         user = db.find_one({'userEmail': userEmail})
         return user['Task']
