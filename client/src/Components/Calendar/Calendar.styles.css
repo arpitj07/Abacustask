@@ -57,3 +57,11 @@
     text-align: right;
     padding: 5px;
 }
+
+.CalendarBody h5{
+    background-color: #8ac926;
+    height: 20px;
+    width: 100%;
+    /* color: white; */
+    text-align: center;
+}

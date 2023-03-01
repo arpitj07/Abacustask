@@ -3,7 +3,7 @@
     height: 100%;
     /* background-color: rgba(0, 0, 0, 0.5); */
     position: absolute;
-    top: 0px;
+    top: 140px;
     left: 0;
     display: flex;
     justify-content: center;
@@ -20,4 +20,57 @@
     border-radius: 10px;
     padding: 30px;
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+
+.EventListContainer{
+    
+    width: 100%;
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.EventListContainer {
+    margin: 10px 0px;
+    padding: 15px;
+    border-radius: 10px;
+
+    
+}
+
+.EventAndButtons{
+    margin: 10px;
+    width: 100%;
+    background-color: #ced4da;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.EventAndButtons button{
+    margin-inline: 10px;
+    height: 30px;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+    color: white;
+    font-weight: 300;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.EventAndButtons li{
+    margin-bottom: 10px;
+    font-weight: bold;
+    font-size: 18px;
+    color: red;
+    text-transform: capitalize;
+    list-style-type: none;
+}
+
+.EventAndButtons p{
+    color: #023e8a;
 }

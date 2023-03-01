@@ -4,10 +4,13 @@ import { Alert, CircularProgress } from '@mui/material';
 import './EventList.styles.css';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../../App';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 const EventList = () => {
 	const [ userDetails, setuserDetails ] = useState([]);
 	const [ loading, setloading ] = useState(false);
+	const [ alertStatus, setAlertStatus ] = useState(0);
+	const [ message, setMessage ] = useState('');
 	const { login, userEmail } = useContext(UserContext);
 	const navigate = useNavigate();
 
@@ -28,24 +31,87 @@ const EventList = () => {
 		fetchUserDetails();
 	}, []);
 
+	const handleDelete = async (id) => {
+		const resp = await fetch('http://localhost:5000/deleteEvent', {
+			method: 'POST',
+			body: JSON.stringify({
+				id,
+				userEmail
+			}),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+
+		const data = await resp.json();
+		console.log(data);
+		if (data.status === 'ok') {
+			setAlertStatus(1);
+			setMessage(data.message);
+
+			setTimeout(() => {
+				window.location.reload();
+			}, 1000);
+		}
+	};
+
+	const handleComplete = async (id) => {
+		const resp = await fetch('http://localhost:5000/completeEvent', {
+			method: 'POST',
+			body: JSON.stringify({
+				userEmail
+			}),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		});
+
+		const data = await resp.json();
+		console.log(data);
+		if (data.status === 'ok') {
+			setAlertStatus(1);
+			setMessage(data.message);
+
+			setTimeout(() => {
+				window.location.reload();
+			}, 1000);
+		}
+	};
+
 	return (
 		<div className="ListWrapper">
 			<div className="ListContainer">
 				<div className="EventListContainer">
 					<h4>Event List</h4>
-					<div className="EventAndButtons">
-						{!loading ? (
-							userDetails.map((task, index) => {
-								const date = new Date(task[0].Date).getDate();
-								const month = new Date(task[0].Date).getMonth();
-								const year = new Date(task[0].Date).getFullYear();
-								const day = new Date(task[0].Date).getDay();
-								const starthours = new Date(task[0].StartTime).toTimeString().slice(0, 5);
-								const endhours = new Date(task[0].EndTime).toTimeString().slice(0, 5);
+
+					{!loading ? (
+						userDetails.map((task) =>
+							task.map((item, index) => {
+								const date = new Date(item.Date).getDate();
+								const month = new Date(item.Date).getMonth();
+								const year = new Date(item.Date).getFullYear();
+								const day = new Date(item.Date).getDay();
+								const starthours = new Date(item.StartTime).toTimeString().slice(0, 5);
+								const endhours = new Date(item.EndTime).toTimeString().slice(0, 5);
+
 								return (
-									<React.Fragment key={index}>
+									<div className="EventAndButtons" key={index}>
 										<span>
-											<li>{task[0].Event}</li>
+											<span>
+												<li
+													style={{
+														color: `${item.Status === 'Complete' ? 'green' : 'red'} `
+													}}
+												>
+													{item.Event}
+												</li>
+												<CheckCircleIcon
+													sx={{
+														display: `${item.Status === 'Complete' ? 'block' : 'none'} `,
+														color: 'green'
+													}}
+												/>
+											</span>
 											<p>
 												{DAYS[day]} {date}-{MONTHS[month]}-{year} {starthours}-{endhours}
 											</p>
@@ -59,24 +125,26 @@ const EventList = () => {
 											</button>
 											<button
 												className="completebutton"
+												onClick={handleComplete}
 												style={{ width: '80px', backgroundColor: '#ffba08' }}
 											>
-												complete
+												{item.Status === 'Complete' ? 'Incomplete' : 'Complete'}
 											</button>
 											<button
 												className="delete"
+												onClick={() => handleDelete(item.TId)}
 												style={{ width: '50px', backgroundColor: '#d00000' }}
 											>
 												delete
 											</button>
 										</div>
-									</React.Fragment>
+									</div>
 								);
 							})
-						) : (
-							<CircularProgress />
-						)}
-					</div>
+						)
+					) : (
+						<CircularProgress />
+					)}
 				</div>
 			</div>
 		</div>

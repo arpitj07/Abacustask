@@ -46,7 +46,7 @@ const Login = () => {
 			setMessage(data.message);
 
 			localStorage.setItem('LoggedIn', JSON.stringify(true));
-			localStorage.setItem('UserEmail', JSON.stringify(userEmail));
+			localStorage.setItem('UserEmail', JSON.stringify(email));
 			setlogin(JSON.parse(localStorage.getItem('LoggedIn')));
 			setUserEmail(JSON.parse(localStorage.getItem('UserEmail')));
 			setTimeout(() => {
