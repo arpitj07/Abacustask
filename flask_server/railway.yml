@@ -10,4 +10,4 @@ services:
     http:
       /:
         get:
-          command: python app.py
+          command: python -m flask run
