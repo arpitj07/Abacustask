@@ -1,0 +1,12 @@
+services:
+  app:
+      build:
+        context: .
+        dockerfile: Dockerfile
+      env:
+        MONGO_URI: mongodb+srv://aspjain07:password_12345@my-cluster-00.hsnz2cn.mongodb.net/UserDataBase?retryWrites=true&w=majority
+        FLASK_APP: app.py
+      http:
+        /:
+          get:
+            command: gunicorn app:app --bind 0.0.0.0:5000 --log-level info
