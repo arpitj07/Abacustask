@@ -23,7 +23,7 @@ FROM python:3.9
 WORKDIR /app
 
 # Copy the requirements.txt file to the container
-COPY requirements.txt .
+COPY /flask_server/requirements.txt .
 
 # Install the dependencies
 RUN pip install -r requirements.txt
