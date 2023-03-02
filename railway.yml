@@ -6,7 +6,7 @@ services:
       gunicorn app:app --workers 1 --worker-class gthread --threads 4 --log-level info
     env:
       PYTHONUNBUFFERED: 1
-      PORT: $$3500
+      PORT: $${PORT}
     http:
       /:
         get:
