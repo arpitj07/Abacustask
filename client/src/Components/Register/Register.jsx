@@ -32,7 +32,7 @@ const Register = () => {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		setLoading(true);
-		const resp = await fetch('http://localhost:5000/register', {
+		const resp = await fetch(`${process.env.REACT_APP_API}/register`, {
 			method: 'POST',
 			body: JSON.stringify({
 				userName,

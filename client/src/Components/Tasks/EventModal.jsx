@@ -46,7 +46,7 @@ const EventModal = () => {
 	const handleAddEvent = async (e) => {
 		e.preventDefault();
 		setLoading(true);
-		const resp = await fetch('http://localhost:5000/addEvent', {
+		const resp = await fetch(`${process.env.REACT_APP_API}/addEvent`, {
 			method: 'POST',
 			body: JSON.stringify({
 				eventText,

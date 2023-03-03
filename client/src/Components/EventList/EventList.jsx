@@ -16,7 +16,7 @@ const EventList = () => {
 
 	const fetchUserDetails = async () => {
 		setloading(true);
-		const resp = await fetch(`http://localhost:5000/userDetails/${userEmail}`);
+		const resp = await fetch(`${process.env.REACT_APP_API}/userDetails/${userEmail}`);
 		const data = await resp.json();
 
 		if (userDetails.length === 0) userDetails.push(data);
