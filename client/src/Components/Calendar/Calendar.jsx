@@ -28,7 +28,7 @@ const Calendar = ({ startingDate }) => {
 
 	const fetchUserDetails = async () => {
 		setLoading(true);
-		const resp = await fetch(`${process.env.REACT_APP_API}/${userEmail}`);
+		const resp = await fetch(`${process.env.REACT_APP_API}/userDetails/${userEmail}`);
 		const data = await resp.json();
 
 		if (userDetails.length === 0) userDetails.push(data);
